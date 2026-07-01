@@ -1,0 +1,42 @@
+AEGIS QC Stress Test Accounts
+Generated: 2026-07-01
+Environment: QC
+
+Browser/audio/PTT base URL:
+https://20.20.0.40
+
+Raw REST/API port:
+http://20.20.0.40:7999
+
+Notes:
+- Send this file separately from docs/API_STRESS_TESTER_HANDOFF.md.
+- Do not paste these passwords into tickets, screenshots, or public reports.
+- Use these only for the approved QC stress-test window.
+- Delete or rotate these accounts after testing is complete.
+
+Role,Username,Password
+admin,stress_admin,StressAdmin2026!Aegis
+commander,stress_commander,StressCommander2026!Aegis
+dispatcher,stress_dispatcher,StressDispatcher2026!Aegis
+supervisor,stress_supervisor,StressSupervisor2026!Aegis
+analyst,stress_analyst,StressAnalyst2026!Aegis
+officer,stress_officer_01,StressOfficer2026!Aegis
+officer,stress_officer_02,StressOfficer2026!Aegis
+officer,stress_officer_03,StressOfficer2026!Aegis
+officer,stress_officer_04,StressOfficer2026!Aegis
+officer,stress_officer_05,StressOfficer2026!Aegis
+officer,stress_officer_06,StressOfficer2026!Aegis
+officer,stress_officer_07,StressOfficer2026!Aegis
+officer,stress_officer_08,StressOfficer2026!Aegis
+officer,stress_officer_09,StressOfficer2026!Aegis
+officer,stress_officer_10,StressOfficer2026!Aegis
+officer,stress_officer_11,StressOfficer2026!Aegis
+officer,stress_officer_12,StressOfficer2026!Aegis
+officer,stress_officer_13,StressOfficer2026!Aegis
+officer,stress_officer_14,StressOfficer2026!Aegis
+officer,stress_officer_15,StressOfficer2026!Aegis
+officer,stress_officer_16,StressOfficer2026!Aegis
+officer,stress_officer_17,StressOfficer2026!Aegis
+officer,stress_officer_18,StressOfficer2026!Aegis
+officer,stress_officer_19,StressOfficer2026!Aegis
+officer,stress_officer_20,StressOfficer2026!Aegis
