@@ -1,0 +1,1563 @@
+{
+  "info": {
+    "_postman_id": "637caa72-0b35-4518-b7db-a4d94b5fa53a",
+    "name": "AEGIS API - Stress Test Collection",
+    "description": "Generated from API_STRESS_TESTER_HANDOFF.md. Covers Auth, MCX, MCData, Incidents/Dispatch/Map, Evidence/Recordings, AI/RapidScan, and MDM Device-Agent REST endpoints. WebSocket message formats are documented in the 'WebSocket Reference' folder (Postman WS requests included where supported by your Postman version).\n\nEnvironment variables expected: baseUrl, token, deviceToken, callId, groupId, fileRef, incidentId, commandId.\n\nTest data prefix per handoff doc: STRESS-20260701-",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25694280"
+  },
+  "item": [
+    {
+      "name": "1. System & Session",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto-capture JWT into collection variable",
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.token) { pm.collectionVariables.set('token', json.token); }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"alpha7\",\n  \"password\": \"Admin2026!zdWQ_7hD4i&o\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User (me)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Config Check",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/system/config-check",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "system",
+                "config-check"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. MCX / Communications",
+      "item": [
+        {
+          "name": "List Talkgroups",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "groups"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Start Call (group/private/broadcast/emergency)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.callId || (json.data && json.data.callId)) {",
+                  "        pm.collectionVariables.set('callId', json.callId || json.data.callId);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"group\",\n  \"groupId\": {{groupId}},\n  \"priority\": \"normal\",\n  \"testPrefix\": \"STRESS-20260701-\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/calls",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "calls"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Active Calls",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/calls?status=active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "calls"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Accept Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/calls/{{callId}}/accept",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "calls",
+                "{{callId}}",
+                "accept"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/calls/{{callId}}/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "calls",
+                "{{callId}}",
+                "reject"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "End Call",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcx/calls/{{callId}}/end",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcx",
+                "calls",
+                "{{callId}}",
+                "end"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "C2 Audience (groups/users)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/c2/audience",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "c2",
+                "audience"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. MCData / Attachments",
+      "item": [
+        {
+          "name": "Get Messages (Inbox/Thread)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcdata/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcdata",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send SDS/MCData Message",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": {{groupId}},\n  \"text\": \"STRESS-20260701- test message\",\n  \"type\": \"sds\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mcdata/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcdata",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Attachment (base64 photo/video)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.fileRef || (json.data && json.data.fileRef)) {",
+                  "        pm.collectionVariables.set('fileRef', json.fileRef || json.data.fileRef);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"STRESS-20260701-photo01.jpg\",\n  \"mimeType\": \"image/jpeg\",\n  \"sizeNote\": \"<=2MB per handoff limits\",\n  \"data\": \"<base64-encoded-file-data>\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mcdata/attachments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcdata",
+                "attachments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Attachment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mcdata/attachments/{{fileRef}}/download",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mcdata",
+                "attachments",
+                "{{fileRef}}",
+                "download"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Incidents / Dispatch / Map",
+      "item": [
+        {
+          "name": "List Incidents",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Incident",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.id || (json.data && json.data.id)) {",
+                  "        pm.collectionVariables.set('incidentId', json.id || json.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"STRESS-20260701- smoke incident\",\n  \"type\": \"test\",\n  \"priority\": \"low\",\n  \"description\": \"API stress smoke test\",\n  \"location_lat\": 25.2048,\n  \"location_lng\": 55.2708\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Incident Detail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents/{{incidentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents",
+                "{{incidentId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create SOS / Panic Incident",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"STRESS-20260701- SOS test\",\n  \"location_lat\": 25.2048,\n  \"location_lng\": 55.2708\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Live Unit Positions (GIS)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/gis/units",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gis",
+                "units"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Checkpoints",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/checkpoints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "checkpoints"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Evidence / Recordings",
+      "item": [
+        {
+          "name": "List Recordings/Media",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/recordings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "recordings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Recording Metadata",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"STRESS-20260701-rec01.mp4\",\n  \"durationSeconds\": 30,\n  \"type\": \"bwc\",\n  \"unitId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/recordings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "recordings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unified Evidence Library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/evidence",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "evidence"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Evidence Package",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evidenceIds\": [],\n  \"reason\": \"STRESS-20260701- test export (small scale only, per destructive/large-scale policy)\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/evidence/export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "evidence",
+                "export"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6. AI / RapidScan",
+      "item": [
+        {
+          "name": "AI Media Pipeline Jobs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/media/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "media",
+                "jobs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AI Repeat/Watchlist Events",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Face Identities/Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/faces",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "faces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Plate Identities/Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/plates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "plates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FRS Scan/Embedding Submission",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imageBase64\": \"<base64-face-image, test data only>\",\n  \"sourceRef\": \"STRESS-20260701-frs01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/frs/scan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "frs",
+                "scan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ANPR Plate Submission",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imageBase64\": \"<base64-plate-image, test data only>\",\n  \"sourceRef\": \"STRESS-20260701-anpr01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/anpr/scan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "anpr",
+                "scan"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7. MDM Device-Agent APIs",
+      "item": [
+        {
+          "name": "Enroll Device Agent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.deviceToken || (json.data && json.data.deviceToken)) {",
+                  "        pm.collectionVariables.set('deviceToken', json.deviceToken || json.data.deviceToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"STRESS-20260701-device01\",\n  \"model\": \"test-emulator\",\n  \"osVersion\": \"test\",\n  \"enrollmentSecret\": \"<provided separately>\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/enroll",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "enroll"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check-in (Heartbeat/Inventory)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{deviceToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batteryLevel\": 85,\n  \"status\": \"online\",\n  \"timestamp\": \"{{$isoTimestamp}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/checkin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "checkin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Poll Pending Commands",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJvZmZpY2VyIiwianRpIjoiYTJlZjlhMTUtZmQ3Mi00ZGFlLThiYWMtMWU0ODE3ZGZmZWEyIiwiaWF0IjoxNzgyODg0OTg3LCJleHAiOjE3ODI5NzEzODd9.shqSz0ZpB5s9ZmzQA4qlw1L9qJFRp6eoFfFtNm8v1JI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{deviceToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/commands",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "commands"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Report Command Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{deviceToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"success\",\n  \"resultMessage\": \"STRESS-20260701- simulated command result\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/commands/{{commandId}}/result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "commands",
+                "{{commandId}}",
+                "result"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Device Location Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{deviceToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 25.2048,\n  \"lng\": 55.2708,\n  \"timestamp\": \"{{$isoTimestamp}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "location"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Inventory Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{deviceToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"installedApps\": [\"com.test.app1\"],\n  \"storageFreeMb\": 4096,\n  \"timestamp\": \"{{$isoTimestamp}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mdm/agent/inventory",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mdm",
+                "agent",
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "These endpoints authenticate with a device token issued at enrollment, not the user JWT. See docs/MDM_AGENT_PROTOCOL.md for the exact device-token header/scheme used in your build; Bearer {{deviceToken}} is used here as the placeholder."
+    },
+    {
+      "name": "8. WebSocket Reference (docs)",
+      "item": [
+        {
+          "name": "WS Auth Payload (reference only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wsUrl}}",
+              "host": [
+                "{{wsUrl}}"
+              ]
+            },
+            "description": "Not an executable HTTP request. Payload to send over the WebSocket immediately after connect:\n{\"type\":\"auth\",\"token\":\"{{token}}\",\"client\":\"stress-test\"}"
+          },
+          "response": []
+        },
+        {
+          "name": "WS location_update (reference only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wsUrl}}",
+              "host": [
+                "{{wsUrl}}"
+              ]
+            },
+            "description": "Payload: {\"type\":\"location_update\",\"lat\":25.2048,\"lng\":55.2708}"
+          },
+          "response": []
+        },
+        {
+          "name": "WS status_update (reference only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wsUrl}}",
+              "host": [
+                "{{wsUrl}}"
+              ]
+            },
+            "description": "Payload: {\"type\":\"status_update\",\"status\":\"on_duty\"}"
+          },
+          "response": []
+        },
+        {
+          "name": "WS ptt_floor_request (reference only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wsUrl}}",
+              "host": [
+                "{{wsUrl}}"
+              ]
+            },
+            "description": "Payload: {\"type\":\"ptt_floor_request\",\"groupId\":{{groupId}}}"
+          },
+          "response": []
+        },
+        {
+          "name": "WS ptt_floor_release (reference only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wsUrl}}",
+              "host": [
+                "{{wsUrl}}"
+              ]
+            },
+            "description": "Payload: {\"type\":\"ptt_floor_release\",\"groupId\":{{groupId}}}"
+          },
+          "response": []
+        }
+      ],
+      "description": "Postman's WebSocket request support varies by version/client. If your Postman supports 'WebSocket Request' items natively, create them manually using wsUrl and the payloads below; this folder documents the protocol for reference.\n\nConnect: {{wsUrl}} (prefer wss://20.20.0.40/ws)\n\nStep 1 - Authenticate immediately after connect:\n{\"type\":\"auth\",\"token\":\"{{token}}\",\"client\":\"stress-test\"}\n\nStep 2 - Common message types to send after auth:\n{\"type\":\"location_update\",\"lat\":25.2048,\"lng\":55.2708}\n{\"type\":\"status_update\",\"status\":\"on_duty\"}\n{\"type\":\"ptt_floor_request\",\"groupId\":1}\n{\"type\":\"ptt_floor_release\",\"groupId\":1}\n\nRules from handoff doc:\n- Start with metadata WS tests (auth, location_update, status_update) before PTT/media tests.\n- Do not flood ptt_audio unless explicitly approved.\n- Always pair ptt_floor_request with ptt_floor_release.\n- Use realistic connection durations, not rapid connect/disconnect loops only.\n- Log server-side timestamps, call IDs, group IDs, and user IDs."
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://20.20.0.40"
+    },
+    {
+      "key": "wsUrl",
+      "value": "wss://20.20.0.40/ws"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "deviceToken",
+      "value": ""
+    },
+    {
+      "key": "callId",
+      "value": ""
+    },
+    {
+      "key": "groupId",
+      "value": "1"
+    },
+    {
+      "key": "fileRef",
+      "value": ""
+    },
+    {
+      "key": "incidentId",
+      "value": ""
+    },
+    {
+      "key": "commandId",
+      "value": ""
+    }
+  ]
+}
