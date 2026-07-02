@@ -1,0 +1,161 @@
+Installed both apps on the BWC successfully.
+ 
+  Device:
+ 
+  - 26605A1580
+
+  - DSJ_HYTS5A1 / SC580
+ 
+  What happened:
+ 
+  - Initial install failed for both apps with INSTALL_FAILED_APP_NOT_WHITELISTED.
+
+  - Found whitelist file on device:
+
+      - /storage/emulated/0/Android/Lable/white_app.xml
+ 
+  - Added:
+
+      - com.aegis.mdm
+
+      - com.aegis.field
+ 
+  - Retried install, both succeeded.
+ 
+  Installed:
+ 
+  - AEGIS MDM Agent: com.aegis.mdm, version 0.1.0
+
+  - AEGIS Field App pre-Opus build: com.aegis.field, version 0.1.0
+
+  - Field App source was the older pre-Opus build from commit bfe5503.
+ 
+  Permissions granted:
+ 
+  - MDM: camera, coarse/fine location
+
+  - Field App: camera, microphone, coarse/fine location
+ 
+  Launch check:
+ 
+  - Both apps launch.
+
+  - Current focused app is com.aegis.field/.MainActivity.
+
+  - No AEGIS crash seen in recent logcat.
+ 
+  Important note: MDM is installed, but not Device Owner. The BWC is already provisioned, so owner mode may require factory reset or vendor provisioning support.
+
+ 
+Please give access to the device's back camera. When a video call comes in, only the front camera shows and there’s no option for the back camera
+Farrukh Hussain
+ 
+Farrukh Hussain added Nasrullah Inayat to the chat and shared all chat history.
+
+ 
+please add  Nasrullah Inayat
+ 
+I have provided him with apis for testing in postman mdm and c2 both
+ 
+API_STRESS_TESTER_HANDOFF.md
+AEGIS_QC_STRESS_TEST_ACCOUNTS_20260701.txt
+ 
+Nasrullah Inayat 
+ 
+let me know for any query/question
+ 
+Farrukh Hussain
+Nasrullah Inayat 👆
+Thank you. I will check them, and if I encounter any issues, I will let you know.
+ 
+if you also have to test Field App-style Android login, MCData upload, WebSocket/PTT behavior, then need this as well 
+ANDROID_INTEGRATION_GUIDE.md
+ 
+and if you want to build some mdm simulator, then go through mdm protocol guide first 
+MDM_AGENT_PROTOCOL.md
+ 
+Salman Siddiq
+Farrukh Hussain - Tanveer has updated the requirements document which were missing and needs to be developed.   You can please start the development for the missing items which are now clarified by T…
+Eisha Saleem - This should be reported back to dev today.
+ 
+Wajid Hussain - Can you please refer us to the latest product features comparison of our platform with Hytera? 
+ 
+Muhammad Usman Orakzai - We need to deploy Rapidscan also to the cloud.
+ 
+Salman Siddiq
+Wajid Hussain - Can you please refer us to the latest product features comparison of our platform with Hytera?
+Will share it by EOD today. Eisha Saleem FYA
+ 
+Farrukh Hussain
+📄 📄
+Nasrullah Inayat passwords are here
+ 
+ 
+http://20.20.0.40:5173/
+ 
+Eisha Saleem - An updated comparison with this Hytera device is also required. That was last checked on 11.06.2026
+ 
+Wajid Hussain FYI.
+ 
+AEGIS_Comparison_Report.xlsx
+AEGIS_Comparison_Report.xlsx
+ 
+I am attaching the Postman API Collection File, kindly check it
+AEGIS Updated API Collection.json
+ 
+Affan Ahmad
+AEGIS Testing Status Report – 19 June 2026  1. As per the updated instructions regarding 3GPP compliance, AEGIS testing was conducted in accordance with the revised test cases provided. 2. The attach…
+Anis Ur Rahman
+ 
+AEGIS Testing 01-7-2026
+ 
+The overall summary of the feature list is mentioned below:
+Status	Features	% of Total	Is Stable	Not Stable
+Functional	8	23.5	7	1
+Partially Functional	7	20.6	0	7
+Not Developed	10	29.4	0	0
+Blocked	9	26.5	0	0
+Total	34	100%	7	8
+Classification logic used (flagging for your review since a few calls involved judgment):
+Functional – Video/voice pull, Real-time positioning, 
+Basic device info, Online/offline presence, 
+Remote device status check,
+Digital evidence mgmt integration
+CCTV integration, Audio/video file query — this last one flagged "Not Stable" due to pending UI/UX fix)
+Partially Functional – 
+PTT call, Instant messaging
+Route planning,
+Watermark
+Emergency alarm
+Camera block alarm
+Face recognition integration
+Not Developed –
+ Remote snapshot
+Remote voice/video recording, 
+Remote playback
+Historical track
+Parameter modification, 
+Acquisition settings
+Time synchronization,
+Alarm management, 
+Man down detection
+Blocked – 
+GEO fence
+ONVIF, RTSP, 3G/LTE/WLAN 
+AEGIS Hytera Requirements Complaince.xlsx
+ 
+QC Intern-1
+AEGIS Testing 01-7-2026   The overall summary of the feature list is mentioned below:    Status Features % of Total Is Stable Not Stable     Functional 8 23.5 7 1   Partially Functional 7 20.6 0 7…
+Anis Ur Rahman Tanveer Abbas Ahmed Taha
+ 
+Salman Siddiq
+Eisha Saleem - An updated comparison with this Hytera device is also required. That was last checked on 11.06.2026   Wajid Hussain FYI.   AEGIS_Comparison_Report.xlsx 📄
+sir Wajid Hussain - A report on this is also needed.
+ 
+Eisha Saleem - Need an updated report with reference to this.
+ 
+AEGIS_Comparison_Report_Final_2026-06-12.xlsx
+ 
+Wajid Hussain, Anis Ur Rahman. This is with respect to BDF deployment.
+AEGIS_Comparison_Report_Final_2026-06-12.xlsx
+ 
