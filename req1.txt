@@ -1,0 +1,35 @@
+AEGIS Testing 01-7-2026
+ 
+The overall summary of the feature list is mentioned below:
+Status	Features	% of Total	Is Stable	Not Stable
+Functional	8	23.5	7	1
+Partially Functional	7	20.6	0	7
+Not Developed	10	29.4	0	0
+Blocked	9	26.5	0	0
+Total	34	100%	7	8
+Classification logic used (flagging for your review since a few calls involved judgment):
+Functional – Video/voice pull, Real-time positioning, 
+Basic device info, Online/offline presence, 
+Remote device status check,
+Digital evidence mgmt integration
+CCTV integration, Audio/video file query — this last one flagged "Not Stable" due to pending UI/UX fix)
+Partially Functional – 
+PTT call, Instant messaging
+Route planning,
+Watermark
+Emergency alarm
+Camera block alarm
+Face recognition integration
+Not Developed –
+ Remote snapshot
+Remote voice/video recording, 
+Remote playback
+Historical track
+Parameter modification, 
+Acquisition settings
+Time synchronization,
+Alarm management, 
+Man down detection
+Blocked – 
+GEO fence
+ONVIF, RTSP, 3G/LTE/WLAN 

@@ -1,0 +1,90 @@
+Farrukh Hussain 02 July 2026 - Todays bug report. Many fixes provided in last 2 days are still in testing and will share their status tomorrow.
+ 
+cc: Salman Siddiq Anis Ur Rahman Ahmed Taha
+ 
+MDM Portal Bugs
+Device -> Actions -> Locate
+The "Locate" feature sometimes does not display the map.
+Device -> Actions -> Message
+On-device messages appear as notifications, but the user cannot open them.
+Device -> Actions -> Volume
+The "Volume" setting accepts values below 0 and above 100. Additionally, the "OK" and "Cancel" buttons have the same functionality; the "Cancel" button does not actually cancel the action.
+The "Audio stream" field accepts any text other than the required streams (media, ring, alarm, notification, call) and subsequently defaults to "media" volume.
+The "Volume level" field accepts special characters.
+Entering a value such as "100 @" in the media volume field is a bug.
+Entering "medium" in the media field and then setting a number changes the volume on the device. It accepts any wording other than the specified audio streams and processes it as media volume.
+Both text fields are not functioning correctly.
+Device -> Actions -> Force check-in
+Not working.
+Device -> Actions -> Audio rec
+The text field accepts and processes any special character.
+It also accepts and processes values below 0 and above 60.
+Device -> Actions -> Remote Snapshot
+Not working
+Assign Profile, Push Policy
+This feature did nothing.
+Device -> Actions -> Camera on/off
+The camera is not disabled when it is open in the field app. If we press "Back" and then open the QR option, it is then disabled.
+The device's personal camera is not turning off.
+Device -> Actions -> Wi-Fi
+The Wi-Fi On/Off toggle is not working.
+Device -> Actions -> Reboot
+The device restarts repeatedly with no option to stop the process.
+Device -> Actions -> Kiosk
+When I click "Kiosk" in the field app on the device, I notice that if I am logged out of the app and press "Back" on the device, it automatically logs in without a password. The user was previously logged in, even though I assigned a different user from the MDM portal.
+When I press "Kiosk Off," it automatically logs out, but it remembers the above scenario where pressing "Back" triggers an automatic login.
+Device -> Inventory
+It redirects me to the commands section and doesn’t show any inventory information.
+Device -> Command
+The Command, Status, and Issued fields do not update in real-time. We have to close the pop-up and reopen the details, then move to the command section for it to update.
+When I ring the device through a command or from actions, it plays two sounds at the start.
+When I send a "Locate" command, it does not show anything on either the portal or the device; it just redirects me to the command page.
+Sending a "Volume Set" command redirects me to the command page without showing anything related to the volume set value or the audio stream (e.g., call, media, etc.). It only shows a "Payload (JSON, optional)" field, where it is not easy for the user to write in JSON format.
+The "Push message" command also requires a JSON format, which is not user-friendly.
+Sending a Wi-Fi enable/disable command is not working.
+"Set Kiosk" works, but it has the same problem mentioned above.
+Many option under this Command screen are not available in Actions. There are many option for which no way to verity them because no output is currently generating for them for example.  Request check-in, Request logs, Remote Snapshot, Remote audio record, Wipe, and Selective Wipe in the "Send command" section.
+Device -> Agent
+Technical information is appearing here that is not make any sense for end user either it should be removed or refine.
+Compliance
+Not completely tested.
+Apps
+When I click "Upload" after providing all the information on the MDM portal, it takes a long time.
+I checked "Mandatory (force install)," but the app was not installed on the device.
+Remote app installation is not working.
+Geofence
+Working, but not fully tested because of the same Wi-Fi connection; testing was not possible.
+
+ 
+Hassan (QC Intern-1) pick the BWC device from Farrukh Hussain for testing 
+ 
+Wajid Hussain Sir, they are currently working on the BWC. They will give it to me in about an hour.
+ 
+Salman Siddiq we have 2 BWC please handover 1 to Hassan
+ 
+Farrukh Hussain
+already there, https://bitbucket.org/rapidevosinteam/workspace/projects/AEG
+Salman Siddiq
+ 
+QC Intern-1
+Farrukh Hussain 02 July 2026 - Todays bug report. Many fixes provided in last 2 days are still in testing and will share their status tomorrow.   cc: Salman Siddiq Anis Ur Rahman Ahmed Taha   MDM Por…
+Farrukh Hussain - Fixes required.
+ 
+Device -> Actions -> Force check-in
+Not working. 
+
+
+is this for bdf or drc? 
+ 
+Farrukh Hussain
+Device -> Actions -> Force check-in  • Not working.    is this for bdf or drc?
+drc
+ 
+Farrukh Hussain  All of them have been tested on DRC.
+ 
+we can remove features that are not required
+ 
+QC Intern-1
+AEGIS Testing 01-7-2026   The overall summary of the feature list is mentioned below:    Status Features % of Total Is Stable Not Stable     Functional 8 23.5 7 1   Partially Functional 7 20.6 0 7…
+there is no check-in check-out requirement, please check. 
+ 
